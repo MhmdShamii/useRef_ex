@@ -33,4 +33,4 @@ The state (what the user sees) is `secondsLeft`, `running`, `tasks` and `activeT
 
 ## Demo tip
 
-In `Timer.jsx`, change `FOCUS_SECONDS = 25 * 60` to `FOCUS_SECONDS = 10` so a full session finishes in 10 seconds while you present.
+Pick the **1 min** button when presenting, so a full session finishes quickly.

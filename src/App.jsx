@@ -22,7 +22,8 @@ function App() {
   return (
     <main className="app">
       <h1 className="title">Focus Timer</h1>
-      <Timer task={activeTask} onFinish={finishSession} />
+      {/* key: when the selected task changes, React creates a fresh Timer (back to 25:00) */}
+      <Timer key={activeTaskId} task={activeTask} onFinish={finishSession} />
       <TaskList
         tasks={tasks}
         activeTaskId={activeTaskId}

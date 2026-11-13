@@ -61,6 +61,34 @@ body {
   color: var(--muted);
 }
 
+.lengths {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.length {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.length.active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.length:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .time {
   margin: 16px 0 24px;
   text-align: center;

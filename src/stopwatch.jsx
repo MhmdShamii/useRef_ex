@@ -4,6 +4,14 @@ function formatTime(ms) {
   return `${(ms / 1000).toFixed(1)}s`
 }
 
+function formatClock(ms) {
+  const totalSeconds = Math.floor(ms / 1000)
+  const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0')
+  const seconds = String(totalSeconds % 60).padStart(2, '0')
+  const tenths = Math.floor((ms % 1000) / 100)
+  return { main: `${minutes}:${seconds}`, tenths: `.${tenths}` }
+}
+
 function Stopwatch() {
   const [elapsed, setElapsed] = useState(0) 
   const [running, setRunning] = useState(false)
@@ -48,27 +56,38 @@ function Stopwatch() {
 
   useEffect(() => () => clearInterval(intervalRef.current), [])
 
+  const clock = formatClock(elapsed)
+
   return (
     <section className="app">
-      <h1 className="app-title">Stopwatch</h1>
-      <p className="app-count">{formatTime(elapsed)}</p>
+      <header className="app-header">
+        <h1 className="app-title">Stopwatch</h1>
+        <span className={`status ${running ? 'is-running' : ''}`}>
+          {running ? 'Running' : elapsed > 0 ? 'Paused' : 'Ready'}
+        </span>
+      </header>
 
-      <div className="filters">
+      <p className="app-count" aria-live="off">
+        {clock.main}
+        <span className="tenths">{clock.tenths}</span>
+      </p>
+
+      <div className="controls">
         <button type="button" className="btn btn-primary" onClick={start} disabled={running}>
           {elapsed > 0 && !running ? 'Resume' : 'Start'}
         </button>
-        <button type="button" className="filter-btn" onClick={stop} disabled={!running}>
+        <button type="button" className="btn" onClick={stop} disabled={!running}>
           Stop
         </button>
-        <button type="button" className="btn btn-clear" onClick={reset} disabled={elapsed === 0}>
+        <button type="button" className="btn" onClick={reset} disabled={elapsed === 0}>
           Reset
         </button>
       </div>
 
-      <form className="task-form" onSubmit={addLap}>
+      <form className="lap-form" onSubmit={addLap}>
         <input
           ref={noteRef}
-          className="task-input"
+          className="lap-input"
           type="text"
           placeholder="Lap note..."
           aria-label="Lap note"
@@ -79,13 +98,15 @@ function Stopwatch() {
       {laps.length === 0 ? (
         <p className="empty">No laps yet.</p>
       ) : (
-        <ul className="task-list">
-          {laps.map((lap) => (
-            <li key={lap.id} className="task-item">
-              <span className="task-text">{formatTime(lap.time)} – {lap.note}</span>
+        <ol className="lap-list">
+          {laps.map((lap, i) => (
+            <li key={lap.id} className="lap-item">
+              <span className="lap-index">{String(i + 1).padStart(2, '0')}</span>
+              <span className="lap-note">{lap.note}</span>
+              <span className="lap-time">{formatTime(lap.time)}</span>
             </li>
           ))}
-        </ul>
+        </ol>
       )}
     </section>
   )
